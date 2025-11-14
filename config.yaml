@@ -1,33 +1,15 @@
 players:
-- Neoh
-- SnK
-- Midazo
 - Lanstark
-- Itah
-- Magad
 - Swed
-- Tsubasa
-- Magma
 - Karanyyan
-- Qt
-- Tchitcha
-- Joueur Solide
-- MFL D1
+
 decks:
   meta:
-  - AS Aggro
-  - BP Blurple
-  - RG Songs
-  - AS Reanimator
-  - GS Pirates
-  - BS Midrange
-  - RP Evasive
-  - GP Evasive
-  - GP Control
-  - RS Midrange
+  - BS
+  
   contenders:
-  - RB Items
-  - BS Ally
+  - RB 
+
 options:
   allow_draws: true
   show_counts_on_matrix: true
