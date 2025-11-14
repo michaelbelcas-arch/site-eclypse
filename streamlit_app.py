@@ -736,6 +736,7 @@ with tab_data:
     )
 
 
+
     # Normalisation types avant comparaison
     edited_norm = edited.copy()
     edited_norm["timestamp"] = pd.to_datetime(edited_norm["timestamp"], errors="coerce")
