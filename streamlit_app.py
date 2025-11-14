@@ -705,6 +705,7 @@ with tab_data:
 
     st.markdown("Historique (éditable — sauvegarde automatique)")
     # Table éditable et sauvegarde auto
+        # Table éditable et sauvegarde automatique
     def df_hash(d: pd.DataFrame) -> str:
         # hash simple pour détecter les changements
         return hashlib.md5(pd.util.hash_pandas_object(d.fillna(""), index=False).values).hexdigest()
@@ -714,26 +715,27 @@ with tab_data:
     matches_display["timestamp"] = matches_display["timestamp"].apply(
         lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if not pd.isna(x) and not isinstance(x, str) else x
     )
-   if matches_display.empty:
-    st.info("Aucun match pour le moment. Ajoutez un match pour commencer.")
-    edited = matches_display  # dataframe vide
-else:
-    edited = st.data_editor(
-        matches_display,
-        num_rows="dynamic",
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "timestamp": st.column_config.TextColumn("timestamp (YYYY-MM-DD HH:MM:SS)", width="medium"),
-            "player_a": st.column_config.SelectboxColumn("player_a", options=CONFIG["players"], width="small"),
-            "deck_a":   st.column_config.SelectboxColumn("deck_a", options=CONFIG["decks"]["meta"] + CONFIG["decks"]["contenders"], width="small"),
-            "score_a":  st.column_config.NumberColumn("score_a", min_value=0, step=1, width="small"),
-            "player_b": st.column_config.SelectboxColumn("player_b", options=CONFIG["players"], width="small"),
-            "deck_b":   st.column_config.SelectboxColumn("deck_b", options=CONFIG["decks"]["meta"] + CONFIG["decks"]["contenders"], width="small"),
-            "score_b":  st.column_config.NumberColumn("score_b", min_value=0, step=1, width="small"),
-        },
-        key="editable_matches",
-    )
+
+    if matches_display.empty:
+        st.info("Aucun match pour le moment. Ajoutez un match pour commencer.")
+        edited = matches_display  # dataframe vide
+    else:
+        edited = st.data_editor(
+            matches_display,
+            num_rows="dynamic",
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "timestamp": st.column_config.TextColumn("timestamp (YYYY-MM-DD HH:MM:SS)", width="medium"),
+                "player_a": st.column_config.SelectboxColumn("player_a", options=CONFIG["players"], width="small"),
+                "deck_a":   st.column_config.SelectboxColumn("deck_a", options=CONFIG["decks"]["meta"] + CONFIG["decks"]["contenders"], width="small"),
+                "score_a":  st.column_config.NumberColumn("score_a", min_value=0, step=1, width="small"),
+                "player_b": st.column_config.SelectboxColumn("player_b", options=CONFIG["players"], width="small"),
+                "deck_b":   st.column_config.SelectboxColumn("deck_b", options=CONFIG["decks"]["meta"] + CONFIG["decks"]["contenders"], width="small"),
+                "score_b":  st.column_config.NumberColumn("score_b", min_value=0, step=1, width="small"),
+            },
+            key="editable_matches",
+        )
 
 
 
