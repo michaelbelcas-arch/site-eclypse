@@ -441,6 +441,15 @@ def ensure_list(x):
     return [x]
 
 # ---------------- UI ----------------
+def ensure_list(x):
+    """Garantit que x est une liste (sinon le transforme en liste)."""
+    if isinstance(x, list):
+        return x
+    if x is None:
+        return []
+    # si c'est une string ou un nombre, on le met dans une liste
+    return [x]
+
 st.title("Match Logger & Winrate Matrix")
 
 tab_matrix, tab_config, tab_data, tab_temporal = st.tabs(["🎯 Matrice","⚙️ Configuration", "💾 Données", "📈 Temporel"])
