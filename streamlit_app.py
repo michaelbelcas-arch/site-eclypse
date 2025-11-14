@@ -431,6 +431,14 @@ def filtered_df(matches: pd.DataFrame, date_from: date | None, date_to: date | N
     if decks_allowed:
         df = df[df["deck_a"].isin(decks_allowed) & df["deck_b"].isin(decks_allowed)]
     return df
+def ensure_list(x):
+    """Garantit que x est une liste (sinon le transforme en liste)."""
+    if isinstance(x, list):
+        return x
+    if x is None:
+        return []
+    # si c'est une string ou un nombre, on le met dans une liste
+    return [x]
 
 # ---------------- UI ----------------
 st.title("Match Logger & Winrate Matrix")
@@ -440,22 +448,31 @@ tab_matrix, tab_config, tab_data, tab_temporal = st.tabs(["🎯 Matrice","⚙️
 
 with tab_config:
     st.subheader("Decks")
+
+    # On s'assure que ces valeurs sont toujours des listes
+    meta_initial = ensure_list(CONFIG["decks"].get("meta", []))
+    contenders_initial = ensure_list(CONFIG["decks"].get("contenders", []))
+    players_initial = ensure_list(CONFIG.get("players", []))
+
     colM, colC = st.columns(2)
     with colM:
         meta = st.data_editor(
-            pd.DataFrame({"meta": CONFIG["decks"]["meta"]}),
+            pd.DataFrame({"meta": meta_initial}),
             num_rows="dynamic", use_container_width=True, key="meta_editor"
         )["meta"].dropna().astype(str).tolist()
+
     with colC:
         contenders = st.data_editor(
-            pd.DataFrame({"contenders": CONFIG["decks"]["contenders"]}),
+            pd.DataFrame({"contenders": contenders_initial}),
             num_rows="dynamic", use_container_width=True, key="cont_editor"
         )["contenders"].dropna().astype(str).tolist()
+
     st.subheader("Joueurs")
     players = st.data_editor(
-        pd.DataFrame({"players": CONFIG["players"]}),
+        pd.DataFrame({"players": players_initial}),
         num_rows="dynamic", use_container_width=True, key="players_editor"
     )["players"].dropna().astype(str).tolist()
+
     st.subheader("Options")
     c1, c2, c3 = st.columns(3)
     with c1:
