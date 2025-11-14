@@ -431,6 +431,14 @@ def filtered_df(matches: pd.DataFrame, date_from: date | None, date_to: date | N
     if decks_allowed:
         df = df[df["deck_a"].isin(decks_allowed) & df["deck_b"].isin(decks_allowed)]
     return df
+def ensure_list(x):
+    """Garantit que x est une liste (sinon le transforme en liste)."""
+    if isinstance(x, list):
+        return x
+    if x is None:
+        return []
+    # si c'est une string ou un nombre, on le met dans une liste
+    return [x]
 
 # ---------------- UI ----------------
 st.title("Match Logger & Winrate Matrix")
