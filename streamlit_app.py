@@ -541,8 +541,13 @@ with tab_matrix:
     # z_df contient le pourcentage (float) pour la heatmap
     idx_cols = pd.MultiIndex.from_product([row_order, col_order], names=["deck_i","deck_j"])
     tmp = pt.groupby(["deck_i","deck_j"]).agg(W=("W","sum"), L=("L","sum")).reindex(idx_cols).reset_index()
-    tmp["N"] = (tmp["W"].fillna(0) + tmp["L"].fillna(0)).astype(int)
-    tmp["WR%"] = np.where(tmp["N"]>0, tmp["W"]/tmp["N"]*100, np.nan)
+tmp["N"] = (tmp["W"].fillna(0) + tmp["L"].fillna(0)).astype(int)
+
+# Calcul sûr du WR% (sans division par zéro)
+tmp["WR%"] = np.nan
+mask = tmp["N"] > 0
+tmp.loc[mask, "WR%"] = (tmp.loc[mask, "W"] / tmp.loc[mask, "N"]) * 100
+
 
     values_df = tmp.pivot(index="deck_i", columns="deck_j", values="WR%").reindex(index=row_order, columns=col_order)
     wl_pairs = tmp.assign(wl=lambda d: (d["W"].fillna(0).astype(int)).astype(str) + "-" + (d["L"].fillna(0).astype(int)).astype(str))
