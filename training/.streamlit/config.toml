@@ -1,0 +1,19 @@
+[theme]
+base = "light"
+
+[server]
+#headless = true
+port = 8501
+address = "127.0.0.1"
+enableCORS = false         # CORS géré par nginx
+enableXsrfProtection = true
+enableWebsocketCompression = true
+maxUploadSize = 200
+baseUrlPath = "matches-report"           # "app" si tu proxifies sous /app
+cookieSameSite = "Lax"
+# si tu es derrière un proxy/TLS
+trustXForwardedHeaders = true   # selon version de Streamlit
+
+[browser]
+gatherUsageStats = false
+
