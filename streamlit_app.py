@@ -717,7 +717,7 @@ with tab_data:
     if matches_display.empty:
     st.info("Aucun match pour le moment. Ajoutez un match pour commencer.")
     edited = matches_display  # dataframe vide
-else:
+    else:
     edited = st.data_editor(
         matches_display,
         num_rows="dynamic",
