@@ -1,9 +1,11 @@
 players:
   - swed
-
+  - KaraNyyan
 decks:
   meta:
   - PS
+  - VV
+  - BS
   contenders:
   - GS
 options:
