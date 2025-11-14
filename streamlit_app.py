@@ -714,6 +714,10 @@ with tab_data:
     matches_display["timestamp"] = matches_display["timestamp"].apply(
         lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if not pd.isna(x) and not isinstance(x, str) else x
     )
+    if matches_display.empty:
+    st.info("Aucun match pour le moment. Ajoutez un match pour commencer.")
+    edited = matches_display  # dataframe vide
+else:
     edited = st.data_editor(
         matches_display,
         num_rows="dynamic",
@@ -730,6 +734,7 @@ with tab_data:
         },
         key="editable_matches",
     )
+
 
     # Normalisation types avant comparaison
     edited_norm = edited.copy()
