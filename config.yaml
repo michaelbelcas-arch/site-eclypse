@@ -2,14 +2,14 @@ players:
 - Lanstark
 - Swed
 - Karanyyan
-
+- Lorcadys
 decks:
   meta:
   - BS
-  - PS  
+  - PS
+  - 🟨🟪
   contenders:
-  - RB 
-
+  - RB
 options:
   allow_draws: true
   show_counts_on_matrix: true
