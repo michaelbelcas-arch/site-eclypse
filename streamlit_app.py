@@ -263,28 +263,13 @@ GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", None)
 
 
 def github_update_file(path: str, content: str, message: str = "Update from Streamlit"):
-    """Crée ou met à jour un fichier dans le repo GitHub configuré via les secrets."""
+    """Crée ou met à jour un fichier dans le repo GitHub (owner/repo en dur)."""
 
     if not GITHUB_TOKEN:
         # Pas de token => on ne fait rien (utile pour tests en local)
         return
 
-    raw_repo = GITHUB_REPO or ""
-    s = raw_repo.strip().rstrip("/")
-
-    # Accepte soit "owner/repo", soit une URL genre "https://github.com/owner/repo(.git)"
-    if s.startswith("http"):
-        if "github.com/" in s:
-            s = s.split("github.com/", 1)[1]
-    if s.endswith(".git"):
-        s = s[:-4]
-
-    if "/" not in s:
-        st.warning(f"GITHUB_REPO mal configuré : {raw_repo!r}. Attendu 'owner/repo'.")
-        return
-
-    owner, repo = s.split("/", 1)
-
+    owner, repo = GITHUB_REPO.split("/", 1)
     url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
