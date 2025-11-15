@@ -15,6 +15,8 @@ from streamlit_autorefresh import st_autorefresh
 import time, threading
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import base64
+import requests
 
 def add_temporal_analysis_tab():
     st.header("📈 Analyse Temporelle")
