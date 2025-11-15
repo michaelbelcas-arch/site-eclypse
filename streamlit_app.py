@@ -256,6 +256,49 @@ st.set_page_config(page_title="Match Logger & Winrate Matrix", layout="wide")
 DATA_DIR = Path(".")
 MATCHES_CSV = DATA_DIR / "matches.csv"
 CONFIG_YAML = DATA_DIR / "config.yaml"
+# ---------------- GitHub (persistance des données) ----------------
+GITHUB_REPO = st.secrets.get("GITHUB_REPO", "michaelbelcas-arch/site-eclypse")
+GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", None)
+
+def github_update_file(path: str, content: str, message: str = "Update from Streamlit"):
+    """Crée ou met à jour un fichier dans le repo GitHub configuré via les secrets."""
+    if not GITHUB_TOKEN:
+        # Pas de token => on ne fait rien (utile pour tests en local)
+        return
+
+    try:
+        owner, repo = GITHUB_REPO.split("/")
+    except ValueError:
+        st.warning("GITHUB_REPO mal configuré dans les secrets.")
+        return
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+    }
+
+    # 1) Récupérer le SHA du fichier s'il existe déjà
+    sha = None
+    r = requests.get(url, headers=headers)
+    if r.status_code == 200:
+        sha = r.json().get("sha")
+    elif r.status_code not in (200, 404):
+        st.warning(f"Erreur GitHub (lecture {path}) : {r.status_code}")
+        return
+
+    # 2) Envoyer le nouveau contenu (base64)
+    import json  # au cas où
+    data = {
+        "message": message,
+        "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
+    }
+    if sha:
+        data["sha"] = sha
+
+    r = requests.put(url, headers=headers, json=data)
+    if r.status_code not in (200, 201):
+        st.warning(f"Erreur GitHub (écriture {path}) : {r.status_code}")
 
 # ---------------- Configuration (YAML) ----------------
 DEFAULT_CONFIG = {
