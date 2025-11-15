@@ -5,3 +5,4 @@ plotly
 pyyaml
 streamlit-autorefresh
 watchdog
+requests
