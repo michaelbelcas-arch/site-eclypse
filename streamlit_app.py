@@ -262,15 +262,26 @@ GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", None)
 
 def github_update_file(path: str, content: str, message: str = "Update from Streamlit"):
     """Crée ou met à jour un fichier dans le repo GitHub configuré via les secrets."""
+
     if not GITHUB_TOKEN:
         # Pas de token => on ne fait rien (utile pour tests en local)
         return
 
-    try:
-        owner, repo = GITHUB_REPO.split("/")
-    except ValueError:
-        st.warning("GITHUB_REPO mal configuré dans les secrets.")
+    raw_repo = GITHUB_REPO or ""
+    s = raw_repo.strip().rstrip("/")
+
+    # Accepte soit "owner/repo", soit une URL genre "https://github.com/owner/repo(.git)"
+    if s.startswith("http"):
+        if "github.com/" in s:
+            s = s.split("github.com/", 1)[1]
+    if s.endswith(".git"):
+        s = s[:-4]
+
+    if "/" not in s:
+        st.warning(f"GITHUB_REPO mal configuré : {raw_repo!r}. Attendu 'owner/repo'.")
         return
+
+    owner, repo = s.split("/", 1)
 
     url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
     headers = {
@@ -283,12 +294,11 @@ def github_update_file(path: str, content: str, message: str = "Update from Stre
     r = requests.get(url, headers=headers)
     if r.status_code == 200:
         sha = r.json().get("sha")
-    elif r.status_code not in (200, 404):
+    elif r.status_code != 404:
         st.warning(f"Erreur GitHub (lecture {path}) : {r.status_code}")
         return
 
     # 2) Envoyer le nouveau contenu (base64)
-    import json  # au cas où
     data = {
         "message": message,
         "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
