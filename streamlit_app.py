@@ -383,8 +383,16 @@ def load_config() -> dict:
     return _deep_merge(cfg, DEFAULT_CONFIG)
 
 def save_config(cfg: dict):
+    # 1) Sauvegarde locale
     with open(CONFIG_YAML, "w", encoding="utf-8") as f:
         yaml.safe_dump(cfg, f, sort_keys=False, allow_unicode=True)
+
+    # 2) Sauvegarde GitHub
+    github_update_file(
+        path="config.yaml",
+        content=yaml.safe_dump(cfg, sort_keys=False, allow_unicode=True),
+        message="Update config.yaml depuis l'app Streamlit"
+    )
 
 CONFIG = load_config()
 
