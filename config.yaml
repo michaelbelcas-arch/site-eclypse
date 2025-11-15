@@ -5,11 +5,22 @@ players:
 - Lorcadys
 decks:
   meta:
-  - BS
-  - PS
   - 🟨🟪
-  contenders:
-  - RB
+  - 🟨🟩
+  - 🟨🟥
+  - 🟨🟦
+  - 🟨⬜
+  - 🟪🟩
+  - 🟪🟥
+  - 🟪🟦
+  - 🟪⬜
+  - 🟩🟥
+  - 🟩🟦
+  - 🟩⬜
+  - 🟥🟦
+  - 🟥⬜
+  - 🟦⬜
+  contenders: []
 options:
   allow_draws: true
   show_counts_on_matrix: true
