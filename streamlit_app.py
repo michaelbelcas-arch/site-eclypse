@@ -428,8 +428,18 @@ def save_matches(df: pd.DataFrame):
     for c in ["score_a","score_b"]:
         df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
     #df.to_csv(MATCHES_CSV, index=False)
-    csv = df.to_csv(index=False)
+        csv = df.to_csv(index=False)
+
+    # Écriture locale (pour l'app en cours)
     atomic_write_text(MATCHES_CSV, csv)
+
+    # Envoi vers GitHub pour persister les données
+    github_update_file(
+        path="matches.csv",
+        content=csv,
+        message="Update matches.csv depuis l'app Streamlit"
+    )
+
 
 # ---------------- Utilitaires stats ----------------
 def accumulate_points(df: pd.DataFrame) -> pd.DataFrame:
