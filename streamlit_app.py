@@ -257,8 +257,10 @@ DATA_DIR = Path(".")
 MATCHES_CSV = DATA_DIR / "matches.csv"
 CONFIG_YAML = DATA_DIR / "config.yaml"
 # ---------------- GitHub (persistance des données) ----------------
-GITHUB_REPO = st.secrets.get("GITHUB_REPO", "michaelbelcas-arch/site-eclypse")
+# On met le repo en dur pour éviter toute erreur de config.
+GITHUB_REPO = "michaelbelcas-arch/site-eclypse"
 GITHUB_TOKEN = st.secrets.get("GITHUB_TOKEN", None)
+
 
 def github_update_file(path: str, content: str, message: str = "Update from Streamlit"):
     """Crée ou met à jour un fichier dans le repo GitHub configuré via les secrets."""
